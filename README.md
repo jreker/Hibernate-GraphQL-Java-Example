@@ -1,4 +1,13 @@
-[![Build Status](https://travis-ci.com/jreker/Hibernate-GraphQL-Java-Example.svg?token=K6k8TUza3z4HxWL6c1Np&branch=master)](https://travis-ci.com/jreker/Hibernate-GraphQL-Java-Example)
+# TL;DR;
+Start containers with compose file in folder "docker":
+```
+docker-compose up
+```
+Access graphiql via your browser:
+```text
+http://localhost:8080
+```
+
 # Getting Started
 ### Description
 This project is a boilerplate for using plain Hibernate 5 with GraphQL webservice in spring boot.
@@ -9,22 +18,26 @@ Based on:
  - Spring Boot
  - GraphQL Spring Boot starter
 
+### Prerequisites
+Installed docker daemon on local system.
+
+### Backend
+The backend spring boot application runs inside a openjdk container.
+
 ### Database
 The database for this project runs inside a docker container. You can have a look on the schema in [initial sql script](docker/init.sql) file.
 
 ### Starting Docker container
 **Do not run this container in a production enviroment!**
 
-You can start the docker container with the compose file in the folder "docker"
-First please set the volume to the init script!
+Run ` docker-compose up` and don't forget to delete the container after you finished: `docker-compose rm` and `docker rmi -f docker_graphql_backend`.
+
+For Linux just run the following:
 
 ```
-- C:\<<yourpath>>\init.sql:/docker-entrypoint-initdb.d/init.sql
+docker-compose up && docker-compose rm && docker rmi -f docker_graphql_backend
 ```
 
-Because in windows this path have to be a absolute path. In linux is can also be a relative one.
-
-Then run ` docker-compose up` and don't forget to delete the container after you finished: `docker-compose rm`.
 ### GraphQL - Examples
 You can access GraphiQL testconsole from:
 
@@ -34,7 +47,7 @@ http://localhost:8080/graphiql/
 
 In the graphql schema-file ([schema.graphqls](src/main/resources/schema.graphqls)) you can see what functions are available via graphQL
 
-####Query
+#### Query
 
 Example (get all categories with links).
 ![GraphQLQuery](doc/graphiql.gif "GraphiQL")
@@ -54,7 +67,7 @@ query {
 ```
 
 #### Mutation 
-#####Insert
+##### Insert
 
 Example (add a new link).
 This query returns the saved link if everything works correctly.

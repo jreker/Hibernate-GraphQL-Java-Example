@@ -1,0 +1,24 @@
+type Query{
+    linkById(Id: Int!): Link
+    categoryById(Id: Int!): Category
+    getCategories: [Category]
+    getLinks: [Link]
+}
+
+type Mutation {
+    addLink(Name: String!, Url: String!, CategoryId: Int!): Link!
+    updateLink(Id: Int!, Name: String, Url: String, CategoryId: Int): Link!
+}
+
+type Category {
+  Id: Int!
+  Name: String
+  Links: [Link]
+}
+
+type Link {
+    Id: Int!
+    Name: String
+    Url: String
+    Category: Category
+}

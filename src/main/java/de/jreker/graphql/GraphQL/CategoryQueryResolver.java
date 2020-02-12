@@ -1,16 +1,10 @@
-package de.jreker.graphql.GraphQL;
+package de.jreker.graphql.graphQL;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import de.jreker.graphql.hibernate.HibernateUtil;
-import de.jreker.graphql.models.Category;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-
-import java.util.List;
+import de.jreker.graphql.models.Category;
+import de.jreker.graphql.repositories.CategoryRepository;
 
 
 //This class must have the same name as the Query in the schema.
@@ -18,35 +12,14 @@ import java.util.List;
 @Component
 public class CategoryQueryResolver implements GraphQLQueryResolver {
 
+    @Autowired
+    CategoryRepository categoryRepository;
 
     public Category categoryById(int id) {
-        SessionFactory factory = HibernateUtil.getSessionFactory();
-        Session session = factory.getCurrentSession();
-        session.getTransaction().begin();
-        String hsql = "Select e from " + Category.class.getName() + " e where id = " + id;
-        Query<Category> query = session.createQuery(hsql);
-        Category cat = query.getSingleResult();
-        Hibernate.initialize(cat.getLinks());
-        session.getTransaction().commit();
-        session.close();
-        return cat;
+        return categoryRepository.findById(id).orElse(null);
     }
 
     public Iterable<Category> getCategories() {
-
-        SessionFactory factory = HibernateUtil.getSessionFactory();
-        Session session = factory.getCurrentSession();
-        session.getTransaction().begin();
-        String hsql = "from " + Category.class.getName() + " e";
-        Query<Category> query = session.createQuery(hsql);
-        List<Category> cats = query.getResultList();
-        Hibernate.initialize(cats);
-        cats.forEach(item -> Hibernate.initialize(item.getLinks()));
-
-        session.getTransaction().commit();
-        session.close();
-        return cats;
+        return categoryRepository.findAll();
     }
-
-
 }

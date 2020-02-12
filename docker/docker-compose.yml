@@ -1,14 +1,5 @@
 version: '3.1'
 services:
-  graphql_backend:
-    build:
-      context: ../
-      dockerfile: docker/Dockerfile
-    ports:
-      - 8080:8080
-    container_name: graphql_backend
-    depends_on:
-      - "db"
   db:
     image: mariadb
     container_name: db
@@ -18,3 +9,14 @@ services:
       - 3306:3306
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  graphql_backend:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    ports:
+      - 8080:8080
+    container_name: graphql_backend
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/testdb
+    depends_on:
+      - "db"

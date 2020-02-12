@@ -11,6 +11,7 @@ public class Link {
     private int Id;
     private String Name;
     private String Url;
+
     @ManyToOne
     @JoinColumn(name="CategoryId")
     private Category Category;

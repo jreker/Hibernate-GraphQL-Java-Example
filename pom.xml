@@ -28,12 +28,20 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.graphql-java/graphql-java -->
+
 		<dependency>
-			<groupId>com.graphql-java</groupId>
-			<artifactId>graphql-java-tools</artifactId>
-			<version>5.2.3</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.graphql-java/graphql-java -->
+
+		<dependency>
+			<groupId>com.graphql-java-kickstart</groupId>
+			<artifactId>graphql-java-tools</artifactId>
+			<version>5.6.0</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.graphql-java/graphql-spring-boot-starter -->
 		<dependency>
 			<groupId>com.graphql-java</groupId>
@@ -41,16 +49,13 @@
 			<version>5.0.2</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.graphql-java/graphql-java-tools -->
+		<!-- This dependency is for graphiQL -->
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphiql-spring-boot-starter</artifactId>
             <version>5.0.2</version>
         </dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>5.2.6.Final</version>
-		</dependency>
+	
 		<!-- Use MySQL Connector-J -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -58,7 +63,7 @@
 			<version>5.1.40</version>
 		</dependency>
 	</dependencies>
-
+	
 	<build>
 		<plugins>
 			<plugin>
@@ -67,5 +72,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

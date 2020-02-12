@@ -1,65 +1,44 @@
-package de.jreker.graphql.GraphQL;
+package de.jreker.graphql.graphQL;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
-import de.jreker.graphql.hibernate.HibernateUtil;
-import de.jreker.graphql.models.Category;
 import de.jreker.graphql.models.Link;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import de.jreker.graphql.repositories.CategoryRepository;
+import de.jreker.graphql.repositories.LinkRepository;
 import org.springframework.stereotype.Component;
-import javax.persistence.NoResultException;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Component
 public class MutationResolver implements GraphQLMutationResolver {
-    public Link addLink(String Name, String Url, int CategoryId){
+
+    CategoryRepository categoryRepository;
+    LinkRepository linkRepository;
+
+    // Constructor DI
+    public MutationResolver(CategoryRepository categoryRepository, LinkRepository linkRepository) {
+        this.categoryRepository = categoryRepository;
+        this.linkRepository = linkRepository;
+    }
+
+    public Link addLink(String Name, String Url, int CategoryId) throws NotFoundException {
         Link link = new Link();
         link.setName(Name);
         link.setUrl(Url);
 
-        CategoryQueryResolver res = new CategoryQueryResolver();
-        link.setCategory(res.categoryById(CategoryId));
-
-
-        SessionFactory factory = HibernateUtil.getSessionFactory();
-        Session session = factory.getCurrentSession();
-
-        session.getTransaction().begin();
-        session.save(link);
-        session.getTransaction().commit();
-        session.close();
+        link.setCategory(categoryRepository.findById(CategoryId)
+                                           .orElseThrow(() -> new NotFoundException("Category not found", CategoryId)));
+        linkRepository.save(link);
         return link;
     }
 
     public Link updateLink(int Id, String Name, String Url, Integer CategoryId) {
-        LinkQueryResolver res = new LinkQueryResolver();
-        Optional<Link> link = Optional.of(res.linkById(Id));
+        Optional<Link> link = Optional.ofNullable(linkRepository.findById(Id)
+                .orElseThrow(() -> new NotFoundException("Link not found", Id)));
 
-        if(link.isPresent()) {
-            link.get().setName(Optional.ofNullable(Name).orElse(link.get().getName()));
-            link.get().setUrl(Optional.ofNullable(Url).orElse(link.get().getUrl()));
-            try {
-                CategoryQueryResolver resCat = new CategoryQueryResolver();
-                if(CategoryId != null) {
-                    Category cat = resCat.categoryById(CategoryId);
-                    link.get().setCategory(cat);
-                }
+        link.get().setName(Optional.ofNullable(Name).orElse(link.get().getName()));
+        link.get().setUrl(Optional.ofNullable(Url).orElse(link.get().getUrl()));
+        link.get().setCategory(categoryRepository.findById(CategoryId)
+                                                 .orElseThrow(() -> new NotFoundException("Category not found", CategoryId)));
 
-                //link.get().setCategory(Optional.ofNullable(resCat.categoryById(CategoryId)).orElse(link.get().getCategory()));
-            } catch(NoResultException ex) {
-                //no result TODO: Add logging
-            }
-            SessionFactory factory = HibernateUtil.getSessionFactory();
-            Session session = factory.getCurrentSession();
-
-            session.getTransaction().begin();
-            session.update(link.get());
-            session.getTransaction().commit();
-            session.close();
-            return link.get();
-        } else {
-            throw new NoSuchElementException("Link not found in db.");
-        }
+        return linkRepository.save(link.orElseThrow(() -> new NotFoundException("Link not found", Id)));
     }
 }

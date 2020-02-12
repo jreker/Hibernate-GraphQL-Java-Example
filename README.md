@@ -10,19 +10,22 @@ http://localhost:8080
 
 # Getting Started
 ### Description
-This project is a boilerplate for using plain Hibernate 5 with GraphQL webservice in spring boot.
+This project is a boilerplate for using Spring Boot with GraphQL.
 It uses a docker container with mariadb as database backend for testing.
 
 Based on:
- - Hibernate 5
- - Spring Boot
- - GraphQL Spring Boot starter
+ - Spring Boot 2
+ - [GraphQL Spring Boot starter](https://github.com/graphql-java-kickstart/graphql-spring-boot) 
 
 ### Prerequisites
 Installed docker daemon on local system.
 
+#### For development:
+- Java8 JDK
+- Apache Maven
+
 ### Backend
-The backend spring boot application runs inside a openjdk container.
+The backend spring boot application runs inside an openjdk container.
 
 ### Database
 The database for this project runs inside a docker container. You can have a look on the schema in [initial sql script](docker/init.sql) file.

@@ -6,11 +6,13 @@ import java.util.List;
 
 @Entity(name="Categories")
 @Table(name="Categories")
+
 public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @javax.persistence.Id
     private int Id;
     private String Name;
+    
     @OneToMany(mappedBy = "Category",cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     private List<Link> Links = new ArrayList<>();
 

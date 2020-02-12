@@ -1,5 +1,6 @@
 ![](https://github.com/jreker/Hibernate-GraphQL-Java-Example/workflows/Java%20CI/badge.svg)
 
+
 # TL;DR;
 Start containers with compose file in folder "docker":
 ```
